@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Kayunga Go</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <div id="splash" class="screen active">
+    <div class="splash-inner">
+      <div class="logo-circle">KG</div>
+      <h1>Kayunga Go</h1>
+      <p>Move around Kayunga, fast &amp; safe.</p>
+    </div>
+  </div>
+
+  <!-- ROLE SELECT -->
+  <div id="roleSelect" class="screen">
+    <div class="topbar"><h2>Welcome</h2></div>
+    <div class="content center-col">
+      <p class="muted">How do you want to use Kayunga Go today?</p>
+      <button class="big-btn passenger" onclick="app.chooseRole('passenger')">
+        🧍 I need a ride
+      </button>
+      <button class="big-btn driver" onclick="app.chooseRole('driver')">
+        🏍️ I'm a rider (driver)
+      </button>
+    </div>
+  </div>
+
+  <!-- PASSENGER: REQUEST RIDE -->
+  <div id="passengerHome" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="app.goTo('roleSelect')">←</button>
+      <h2>Book a Ride</h2>
+      <button class="icon-btn" onclick="app.goTo('history')">🕑</button>
+    </div>
+    <div class="content">
+      <label>Pickup point</label>
+      <select id="pickup"></select>
+
+      <label>Drop-off point</label>
+      <select id="dropoff"></select>
+
+      <label>Ride type</label>
+      <div class="ride-type-row">
+        <button class="ride-type active" data-type="boda" onclick="app.selectRideType(this,'boda')">🏍️ Boda</button>
+        <button class="ride-type" data-type="special" onclick="app.selectRideType(this,'special')">🚗 Special Hire</button>
+      </div>
+
+      <div id="fareBox" class="fare-box">Select pickup and drop-off to see fare estimate</div>
+
+      <button class="cta-btn" onclick="app.requestRide()">Request Ride</button>
+    </div>
+  </div>
+
+  <!-- PASSENGER: SEARCHING -->
+  <div id="searching" class="screen">
+    <div class="content center-col">
+      <div class="spinner"></div>
+      <h3>Looking for a rider near you...</h3>
+      <p class="muted" id="searchRouteText"></p>
+      <button class="link-btn" onclick="app.cancelSearch()">Cancel request</button>
+    </div>
+  </div>
+
+  <!-- PASSENGER: MATCHED -->
+  <div id="matched" class="screen">
+    <div class="content">
+      <div class="match-card">
+        <div class="driver-avatar">🏍️</div>
+        <div>
+          <h3 id="matchedDriverName">Driver</h3>
+          <p class="muted" id="matchedDriverMoto"></p>
+          <p class="stars">⭐⭐⭐⭐⭐</p>
+        </div>
+      </div>
+      <div class="trip-info">
+        <p><strong>From:</strong> <span id="tripFrom"></span></p>
+        <p><strong>To:</strong> <span id="tripTo"></span></p>
+        <p><strong>Fare:</strong> UGX <span id="tripFare"></span></p>
+        <p><strong>ETA:</strong> <span id="tripEta"></span> mins</p>
+      </div>
+      <button class="cta-btn" onclick="app.callDriver()">📞 Call Rider</button>
+      <button class="cta-btn secondary" onclick="app.completeRide()">Mark Trip Complete</button>
+      <button class="link-btn danger" onclick="app.cancelSearch()">Cancel trip</button>
+    </div>
+  </div>
+
+  <!-- PASSENGER: HISTORY -->
+  <div id="history" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="app.goTo('passengerHome')">←</button>
+      <h2>Trip History</h2>
+    </div>
+    <div class="content" id="historyList"></div>
+  </div>
+
+  <!-- DRIVER HOME -->
+  <div id="driverHome" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="app.goTo('roleSelect')">←</button>
+      <h2>Rider Dashboard</h2>
+      <label class="switch">
+        <input type="checkbox" id="onlineToggle" onchange="app.toggleOnline()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="content">
+      <div id="onlineStatus" class="status-banner offline">You are OFFLINE</div>
+      <h3>Nearby Requests</h3>
+      <div id="requestsList" class="requests-list"></div>
+    </div>
+  </div>
+
+  <!-- DRIVER: ACTIVE TRIP -->
+  <div id="driverTrip" class="screen">
+    <div class="content">
+      <h3>Active Trip</h3>
+      <div class="trip-info">
+        <p><strong>Passenger:</strong> <span id="dTripPassenger"></span></p>
+        <p><strong>From:</strong> <span id="dTripFrom"></span></p>
+        <p><strong>To:</strong> <span id="dTripTo"></span></p>
+        <p><strong>Fare:</strong> UGX <span id="dTripFare"></span></p>
+      </div>
+      <button class="cta-btn" onclick="app.driverCompleteRide()">Complete Trip</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
